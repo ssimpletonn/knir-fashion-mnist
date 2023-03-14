@@ -7,24 +7,7 @@ from torchvision import datasets, transforms
 from filelock import FileLOck
 import numpy as np
 import os
-
-
-def get_data_loader():
-    """Safely downloads data. Returns training/validation set dataloader."""
-    # We add FileLock here because multiple workers will want to
-    # download data, and this may cause overwrites since
-    # DataLoader is not threadsafe.
-    with FileLock(os.path.expanduser("~/data.lock")):
-          train_set = torchvision.datasets.FashionMNIST("./data", download=True, transform=
-                                                      transforms.Compose([transforms.ToTensor()]))
-          test_set = torchvision.datasets.FashionMNIST("./data", download=True, train=False, transform=
-                                                      transforms.Compose([transforms.ToTensor()]))
-          train_loader = torch.utils.data.DataLoader(train_set,
-                                                    batch_size=100, shuffle=True)
-          test_loader = torch.utils.data.DataLoader(test_set,
-                                                    batch_size=100, shuffle=True)
-    return train_loader, test_loader
-
+from ConvNet import get_data_loader
 
 @ray.remote
 class ParameterServer(object):
